@@ -144,10 +144,9 @@ export default class App extends React.Component {
                                         }/>
                                 ))
                             } </FormGroup>
-                            {
-                            this.validate() && <InputGroup className="d-flex justify-content-end">
+                            <InputGroup className="d-flex justify-content-end">
                                 <Button disabled={
-                                        this.state.loading
+                                        this.state.loading || this.validate()
                                     }
                                     color="success"
                                     size="md"
@@ -158,7 +157,7 @@ export default class App extends React.Component {
                                         })
                                 }>Add Employee</Button>
                             </InputGroup>
-                        } </CardBody>
+                        </CardBody>
                     </Card>
                 </Row>
                 <CustomInput name="Search Employee"
