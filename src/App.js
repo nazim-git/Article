@@ -108,7 +108,7 @@ export default class App extends React.Component {
         return (
             <React.Fragment>
                 <Navbar color="dark" light expand="md">
-                    <NavbarBrand className="mr-auto text-white">Article Profile Management</NavbarBrand>
+                    <NavbarBrand className="mr-auto text-white">Articles Gallery</NavbarBrand>
                 </Navbar>
                 <div className="mr-2 ml-2">
                     <Row className="d-flex justify-content-center ">
@@ -180,7 +180,7 @@ const CustomInput = ({
                 <InputGroupText>{name.toUpperCase()}</InputGroupText>
             </InputGroupAddon>
             <Input type={value.length > 50 ? "textarea" : "text"}
-            rows="1"
+                rows="1"
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange} />
