@@ -148,7 +148,7 @@ export default class App extends React.Component {
                             } </FormGroup>
                             <InputGroup className="d-flex justify-content-start ml-4">
                                 <Button disabled={
-                                        this.state.loading || this.validate()
+                                        this.state.loading || !this.validate()
                                     }
                                     color="success"
                                     size="md"
