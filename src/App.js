@@ -12,193 +12,178 @@ import {
     FormGroup,
     CardHeader,
     Navbar,
-    Nav,
-    NavbarText,
-    NavItem,
     NavbarBrand
 } from "reactstrap"
-import EmployeeList from "./components/EmployeeList"
+import ArticleList from "./components/ArticlesList"
 
-const serverURL = "https://employee-profile-server.herokuapp.com"
+const serverURL = "https://articlesbynazim-server.herokuapp.com"
 export default class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            employees: [],
-            employee: {
-                name: "",
-                email: "",
-                phone: "",
-                address: "",
-                role: "",
-                gender: ""
+            articles: [],
+            article: {
+                title: "",
+                author: "",
+                body: "",
             },
             loading: false
         }
     }
     componentDidMount = _ => {
-        this.getAllEmployees()
+        this.getAllArticles()
     }
-    getAllEmployees = async () => {
-        let employees = await axios.get(`${serverURL}/employees`)
+    getAllArticles = async () => {
+        let articles = await axios.get(`${serverURL}/articles`)
         this.setState({
-            employees: employees.data,
+            articles: articles.data,
             loading: false,
-            employee: {
-                name: "",
-                email: "",
-                phone: "",
-                address: "",
-                role: "",
-                gender: ""
+            article: {
+                title: "",
+                author: "",
+                body: "",
             }
         })
     }
-    addNewEmployee = (employee) => {
-        this.setState({loading: true})
-        axios.post(`${serverURL}/addEmployee`, employee).then(() => {
-            alert("employee added");
-            this.getAllEmployees()
-        }).catch(err => alert(err + ""))
+    addNewArticle = (article) => {
+        this.setState({ loading: true })
+        axios.post(`${serverURL}/addArticle`, article).then(() => {
+            alert("article added");
+            this.getAllArticles()
+        }).catch(err => { alert(err + ""); this.getAllArticles() })
     }
-    deleteEmployee = (emp_id) => {
+    deleteArticle = (emp_id) => {
         this.setState({
-            employees: this.state.employees.filter(emp => {
+            articles: this.state.articles.filter(emp => {
                 return emp._id !== emp_id
             })
         }, () => {
-            axios.delete(`${serverURL}/deleteEmployee/${emp_id}`).then(() => alert("Employee deleted")).catch(err => {
+            axios.delete(`${serverURL}/deleteArticle/${emp_id}`).then(() => alert("Article deleted")).catch(err => {
                 alert(err + "");
-                this.getAllEmployees()
+                this.getAllArticles()
             })
         })
     }
-    updateEmployee = (updatedObject, emp_id) => {
+    updateArticle = (updatedObject, emp_id) => {
         this.setState({
-            employees: this.state.employees.map(employee => {
-                if (employee._id === emp_id) {
-                    employee = {
-                        ...employee,
+            articles: this.state.articles.map(article => {
+                if (article._id === emp_id) {
+                    article = {
+                        ...article,
                         ...updatedObject
                     }
                 }
-                return employee
+                return article
             })
         }, () => {
-            axios.post(`${serverURL}/updateEmployee/${emp_id}`, updatedObject).then(() => {
-                console.log("employee updated")
+            axios.post(`${serverURL}/updateArticle/${emp_id}`, updatedObject).then(() => {
+                console.log("article updated")
             }).catch(err => {
                 alert(err + "")
-                this.getAllEmployees()
+                this.getAllArticles()
             })
         })
 
     }
     validate = () => {
-        let validate = Object.values(this.state.employee).every(value => value);
-
+        let validate = Object.values(this.state.article).every(value => value);
         return validate
     }
-    search = (employees, search) => {
-        return employees.filter(employee => {
-            let combinedString = Object.values(employee).map(e => e + "").join();
+    search = (articles, search) => {
+        return articles.filter(article => {
+            let combinedString = Object.values(article).map(e => e + "").join();
             console.log(combinedString, search)
             return combinedString.includes(search)
         })
     }
     render() {
-        let {employee, employees, search} = this.state
+        let { article, articles, search } = this.state
         let {
-            name,
-            email,
-            phone,
-            address,
-            role,
-            gender
-        } = employee
-        if (search) 
-            employees = this.search(employees, search)
+            title,
+            author,
+            body,
+        } = article
+        if (search)
+            articles = this.search(articles, search)
         return (
             <React.Fragment>
                 <Navbar color="dark" light expand="md">
-                    <NavbarBrand className="mr-auto text-white">Employee Profile Management</NavbarBrand>
+                    <NavbarBrand className="mr-auto text-white">Article Profile Management</NavbarBrand>
                 </Navbar>
                 <div className="mr-2 ml-2">
-                <Row className="d-flex justify-content-center ">
-                    <Card className="w-100">
-                        <CardHeader>
-                            Add New Employee
+                    <Row className="d-flex justify-content-center ">
+                        <Card className="w-100">
+                            <CardHeader>
+                                Add New Article
                         </CardHeader>
-                        <CardBody>
-                            <FormGroup> {
-                                Object.keys(employee).map(key => (
-                                    <CustomInput name={key}
-                                        value={
-                                            employee[key]
-                                        }
-                                        onChange={
-                                            (e) => this.setState({
-                                                employee: {
-                                                    ...employee,
-                                                    [key]: e.target.value
-                                                }
-                                            })
-                                        }/>
-                                ))
-                            } </FormGroup>
-                            <InputGroup className="d-flex justify-content-start ml-4">
-                                <Button disabled={
+                            <CardBody>
+                                <FormGroup> {
+                                    Object.keys(article).map(key => (
+                                        <CustomInput name={key}
+                                            value={
+                                                article[key]
+                                            }
+                                            onChange={
+                                                (e) => this.setState({
+                                                    article: {
+                                                        ...article,
+                                                        [key]: e.target.value
+                                                    }
+                                                })
+                                            } />
+                                    ))
+                                } </FormGroup>
+                                <InputGroup className="d-flex justify-content-start ml-4">
+                                    <Button disabled={
                                         this.state.loading || !this.validate()
                                     }
-                                    color="success"
-                                    size="md"
-                                    active
-                                    onClick={
-                                        () => this.addNewEmployee({
-                                            ...this.state.employee
-                                        })
-                                }>Add Employee</Button>
-                            </InputGroup>
-                        </CardBody>
-                    </Card>
-                </Row>
-                <CustomInput name="Search"
-                    value={search}
-                    placeholder="Search something . . ."
-                    onChange={
-                        (e) => this.setState({search: e.target.value})
-                    }/>
-                <EmployeeList employees={employees}
-                    deleteEmployee={
-                        this.deleteEmployee
-                    }
-                    updateEmployee={
-                        this.updateEmployee
-                    }
-                    CustomInput={CustomInput}
-                    onChange={
-                        this.updateEmployee
-                    }/>
+                                        color="success"
+                                        size="md"
+                                        active
+                                        onClick={
+                                            () => this.addNewArticle({
+                                                ...this.state.article
+                                            })
+                                        }>Add Article</Button>
+                                </InputGroup>
+                            </CardBody>
+                        </Card>
+                    </Row>
+                    <CustomInput name="Search"
+                        value={search}
+                        placeholder="Search something . . ."
+                        onChange={
+                            (e) => this.setState({ search: e.target.value })
+                        } />
+                    <ArticleList articles={articles}
+                        delete={
+                            this.deleteArticle
+                        }
+                        CustomInput={CustomInput}
+                        onChange={
+                            this.updateArticle
+                        } />
                 </div>
             </React.Fragment>
         )
     }
 }
 const CustomInput = ({
-    name,
-    value,
+    name = "",
+    value = "",
     placeholder = "",
-    onChange = () => {}
+    onChange = () => { }
 }) => {
     return (
         <InputGroup className="w-100 pl-4 pr-4 mt-1">
-            <InputGroupAddon style={{width:"90px"}}>
+            <InputGroupAddon style={{ width: "90px" }}>
                 <InputGroupText>{name.toUpperCase()}</InputGroupText>
             </InputGroupAddon>
-            <Input type="text"
+            <Input type={value.length > 50 ? "textarea" : "text"}
+            rows="1"
                 placeholder={placeholder}
                 value={value}
-                onChange={onChange}/>
+                onChange={onChange} />
         </InputGroup>
     )
 }
