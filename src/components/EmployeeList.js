@@ -12,7 +12,7 @@ import {
 const EmployeeList = (props) => {
     let {CustomInput, onChange} = props
     return <React.Fragment>
-        <h1 className="d-flex justify-content-center">Employees</h1>
+        {props.employees.length>0 && <h1 className="d-flex justify-content-center">Employees</h1>}
         <hr/>
         <Row> {
             props.employees.map((employee, index) => {
@@ -39,8 +39,8 @@ const EmployeeList = (props) => {
                             {
                                 position: 'absolute',
                                 zIndex: 99,
-                                marginLeft: 3,
-                                marginTop: 3
+                                left: 15,
+                                top: 0
                             }
                         }>
                             {
@@ -49,27 +49,35 @@ const EmployeeList = (props) => {
                         <ListGroupItem key={
                             `todo-list-${_id}`
                         }>
-                            <InputGroup>
-                                <FormGroup> {
-                                    Object.keys(emp).map(key => (
-                                        <CustomInput name={key}
-                                            value={
-                                                employee[key]
-                                            }
-                                            onChange={
-                                                (e) => onChange({
-                                                    [key]: e.target.value
-                                                }, _id)
-                                            }/>
-                                    ))
-                                } </FormGroup>
-                                <InputGroup className="d-flex justify-content-end">
-                                    <Button color="danger" size="md" active
-                                        onClick={
-                                            () => props.deleteEmployee(_id)
-                                    }>Delete Employee</Button>
-                                </InputGroup>
-                            </InputGroup>
+                            <Button style={
+                                    {
+                                        position: 'absolute',
+                                        zIndex: 99,
+                                        right: 0,
+                                        top:0
+                                    }
+                                }
+                                color="danger"
+                                size="sm"
+                                active
+                                onClick={
+                                    () => props.deleteEmployee(_id)
+                            }>
+                                <i class="fas fa-user-minus"></i>
+                            </Button>
+                            <FormGroup> {
+                                Object.keys(emp).map(key => (
+                                    <CustomInput name={key}
+                                        value={
+                                            employee[key]
+                                        }
+                                        onChange={
+                                            (e) => onChange({
+                                                [key]: e.target.value
+                                            }, _id)
+                                        }/>
+                                ))
+                            } </FormGroup>
                         </ListGroupItem>
                     </Col>
                 )

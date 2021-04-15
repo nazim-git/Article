@@ -18,6 +18,7 @@ import {
     NavbarBrand
 } from "reactstrap"
 import EmployeeList from "./components/EmployeeList"
+
 const serverURL = "https://employee-profile-server.herokuapp.com"
 export default class App extends React.Component {
     constructor(props) {
@@ -122,7 +123,8 @@ export default class App extends React.Component {
                 <Navbar color="dark" light expand="md">
                     <NavbarBrand className="mr-auto text-white">Employee Profile Management</NavbarBrand>
                 </Navbar>
-                <Row className="d-flex justify-content-center">
+                <div className="mr-2 ml-2">
+                <Row className="d-flex justify-content-center ">
                     <Card className="w-100">
                         <CardHeader>
                             Add New Employee
@@ -144,7 +146,7 @@ export default class App extends React.Component {
                                         }/>
                                 ))
                             } </FormGroup>
-                            <InputGroup className="d-flex justify-content-end">
+                            <InputGroup className="d-flex justify-content-start ml-4">
                                 <Button disabled={
                                         this.state.loading || this.validate()
                                     }
@@ -160,9 +162,9 @@ export default class App extends React.Component {
                         </CardBody>
                     </Card>
                 </Row>
-                <CustomInput name="Search Employee"
+                <CustomInput name="Search"
                     value={search}
-                    placeholder="Search employee e.g Irfan, manager, male . . ."
+                    placeholder="Search something . . ."
                     onChange={
                         (e) => this.setState({search: e.target.value})
                     }/>
@@ -177,6 +179,7 @@ export default class App extends React.Component {
                     onChange={
                         this.updateEmployee
                     }/>
+                </div>
             </React.Fragment>
         )
     }
@@ -188,9 +191,9 @@ const CustomInput = ({
     onChange = () => {}
 }) => {
     return (
-        <InputGroup className="w-100 pl-4 pr-4">
-            <InputGroupAddon addonType="prepend">
-                <InputGroupText>{name}</InputGroupText>
+        <InputGroup className="w-100 pl-4 pr-4 mt-1">
+            <InputGroupAddon style={{width:"90px"}}>
+                <InputGroupText>{name.toUpperCase()}</InputGroupText>
             </InputGroupAddon>
             <Input type="text"
                 placeholder={placeholder}
